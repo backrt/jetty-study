@@ -8,9 +8,12 @@ import com.jackchan.takeoutservice.servlet.OrderServlet;
 import com.jackchan.takeoutservice.servlet.PayServlet;
 import com.jackchan.takeoutservice.servlet.SellerListServlet;
 import com.jackchan.takeoutservice.servlet.UserLoginServlet;
+import com.jackchan.takeoutservice.servlet2.LocalApkFileServlet;
+import com.jackchan.takeoutservice.servlet2.LocalAppServlet;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
 /**
  * ============================================================
  * Copyright：JackChan和他的朋友们有限公司版权所有 (c) 2017
@@ -43,5 +46,9 @@ public class ServlertConfig {
         handler.addServlet(new ServletHolder(new SellerListServlet()), "/TakeoutService/sellerlist");
         handler.addServlet(new ServletHolder(new UserLoginServlet()), "/TakeoutService/login");
         handler.addServlet(new ServletHolder(new ImageServlet()), "/TakeoutService/image");
+
+        //test
+        handler.addServlet(new ServletHolder(new LocalAppServlet()), "/TakeoutService/app");
+        handler.addServlet(new ServletHolder(new LocalApkFileServlet()), "/TakeoutService/apk");
     }
 }

@@ -156,7 +156,6 @@ public class HomeServlet extends HttpServlet {
 		res.setData(App.getGson().toJson(info));
 
 		CommonUtil.renderJson(response, res);
-
 	}
 
 }

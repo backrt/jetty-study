@@ -154,7 +154,6 @@ public class CommonUtil {
 	 * @param object Java对象,将被转化为json字符串.
 	 */
 	public static void renderJson(final HttpServletResponse response,final Object object, final String... headers) {
-		// String jsonString = JSONObject.fromObject(object).toString();
 		String jsonString = App.getGson().toJson(object);
 		render(response,JSON, jsonString, headers);
 	}
@@ -166,7 +165,6 @@ public class CommonUtil {
 	 * @param headers
 	 */
 	public static void renderJson(final HttpServletResponse response,final List<?> list, final String... headers) {
-		// String jsonString = JSONArray.fromObject(list).toString();
 		String jsonString = App.getGson().toJson(list);
 		render(response,JSON, jsonString, headers);
 	}
