@@ -41,6 +41,7 @@ public class LocalAppProvider {
             proper.setVername(packageInfo.versionName);
             proper.setUrl(packageInfo.applicationInfo.publicSourceDir);
             proper.setPackagename(packageInfo.packageName);
+            proper.setDrawable(packageInfo.applicationInfo.loadIcon(packageManager));
 
             properList.add(proper);
         }

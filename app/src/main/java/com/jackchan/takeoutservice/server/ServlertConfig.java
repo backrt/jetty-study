@@ -10,6 +10,7 @@ import com.jackchan.takeoutservice.servlet.SellerListServlet;
 import com.jackchan.takeoutservice.servlet.UserLoginServlet;
 import com.jackchan.takeoutservice.servlet2.LocalApkFileServlet;
 import com.jackchan.takeoutservice.servlet2.LocalAppServlet;
+import com.jackchan.takeoutservice.servlet2.LocalAppServlet2;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -49,6 +50,7 @@ public class ServlertConfig {
 
         //test
         handler.addServlet(new ServletHolder(new LocalAppServlet()), "/TakeoutService/app");
+        handler.addServlet(new ServletHolder(new LocalAppServlet2()), "/TakeoutService/applist");
         handler.addServlet(new ServletHolder(new LocalApkFileServlet()), "/TakeoutService/apk");
     }
 }

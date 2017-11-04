@@ -1,5 +1,7 @@
 package com.jackchan.takeoutservice.servlet2.proper;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Author：lhb on 2017/10/23 16:46
  * Mail：lihaibo@znds.com
@@ -16,6 +18,16 @@ public class LocalAppProper {
     private int vercode;
 
     private String url;
+
+    private Drawable drawable;
+
+    public Drawable getDrawable() {
+        return drawable;
+    }
+
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
+    }
 
     public String getAppname() {
         return appname;

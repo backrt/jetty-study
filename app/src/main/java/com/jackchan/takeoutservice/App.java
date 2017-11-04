@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.google.gson.Gson;
+import com.jackchan.takeoutservice.imageServer.ImageMaker;
 
 /**
  * ============================================================
@@ -40,6 +41,8 @@ public class App extends Application {
 
         context = getApplicationContext();
         handler = new Handler();
+        //
+        ImageMaker.generateImageWithApkFile(this);
     }
 
     public static Context getContext() {

@@ -10,7 +10,6 @@ import com.jackchan.takeoutservice.servlet2.proper.LocalAppProper;
 import com.jackchan.takeoutservice.utils.CommonUtil;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,11 +32,8 @@ public class LocalApkFileServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp);
         Log.d(TAG, "doGet");
-
-
         Log.d(TAG, "method:" + req.getMethod() + "|" + "uri:" + req.getRequestURI() + "|" + "url:" + req.getRequestURL());
         Log.d(TAG, "remote addr:" + req.getRemoteAddr() + "|" + "remote host:" + req.getRemoteHost() + "|" + "remote port:" + req.getRemotePort());
-
 
         String packageName = req.getParameter("packagename");
         if (TextUtils.isEmpty(packageName)) {
@@ -45,22 +41,15 @@ public class LocalApkFileServlet extends BaseServlet {
             return;
         }
 
-
         Log.d(TAG, "packagename = " + packageName);
-
         LocalAppProper proper = LocalAppProvider.getLocalUninstalledApp(App.getContext(), packageName);
-
         Log.d(TAG, proper.toString());
-
-        //
-
         downloadChineseFileByOutputStream(resp, proper.getUrl(), generateFileName(proper));
     }
 
     private String generateFileName(LocalAppProper proper) {
         final String DEVIDE = "_";
         final String FILE_SUFFIX = ".apk";
-
         return proper.getAppname() + DEVIDE
                 + proper.getPackagename() + DEVIDE
                 + "V" + proper.getVername() + DEVIDE
@@ -69,7 +58,7 @@ public class LocalApkFileServlet extends BaseServlet {
 
 
     private void downloadChineseFileByOutputStream(HttpServletResponse response, String filePath, String fileName)
-            throws FileNotFoundException, IOException {
+            throws IOException {
 
         Log.d(TAG, "== begin response apk file  == ");
         Log.d(TAG, "apk file path = " + filePath);
