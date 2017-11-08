@@ -37,6 +37,9 @@ import java.io.File;
  * ============================================================
  */
 public class WebService extends Service {
+
+    private static final int PORT = 8088;
+
     private final int open_server = 0;
     private final int open_server_fail = 1;
     private final int close_server = 2;
@@ -110,9 +113,8 @@ public class WebService extends Service {
                 // ipv6 workaround for froyo
                 System.setProperty("java.net.preferIPv6Addresses", "false");
 
-                server = new Server(8088);
-//                server.setHandler(new DefaultHandler());
-				ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+                server = new Server(PORT);
+                ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
                 contextHandler.setContextPath("/");
                 server.setHandler(contextHandler);
                 ServlertConfig.config(contextHandler);
@@ -123,8 +125,6 @@ public class WebService extends Service {
                 mHandler.sendEmptyMessage(open_server);
             } catch (Exception e) {
                 server = null;
-                e.printStackTrace();
-                System.out.println("Exception");
                 mHandler.sendEmptyMessage(open_server_fail);
             }
         }
