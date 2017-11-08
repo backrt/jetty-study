@@ -65,9 +65,11 @@ public class LocalAppServlet2 extends BaseServlet {
 
         // format response
 //        CommonUtil.renderJson(resp, bean);
-        CommonUtil.renderHtml(resp,generateHtml_applist());
+        CommonUtil.renderHtml(resp, generateHtml_applist());
     }
 
+
+    //public static String baseurl = "http://127.0.0.1:8090/TakeoutService/image?name=";
 
     String html = "<!DOCTYPE html>\n" +
             "<html>\n" +
@@ -80,9 +82,9 @@ public class LocalAppServlet2 extends BaseServlet {
             "\t\t<table id=\"app_table\" border=\"3\" align=\"center\" cols=\"5\" bordercolor=\"#a32112\">\n" +
             "\n" +
             "\t\t\t<tr id=\"row1\">\n" +
-            "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" />\n" +
+            "\t\t\t\t<td><img src=\"/TakeoutService/image?name=com.aishang.iptv.livecore\" height=\"100\" width=\"100\" />\n" +
             "\t\t\t\t</td>\n" +
-            "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +
+            "\t\t\t\t<td><img src=\"/TakeoutService/image?name=com.aishang.iptv.livecore\" height=\"100\" width=\"100\" /></td>\n" +
             "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +
             "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +
             "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +

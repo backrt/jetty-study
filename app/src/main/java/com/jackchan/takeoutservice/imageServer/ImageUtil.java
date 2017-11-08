@@ -19,6 +19,10 @@ import java.io.IOException;
 
 public class ImageUtil {
 
+    private static final String APP_ICON_CACHE_DIR = "app_icon";
+    private static final String IMG_COMPRESS_FORMAT = "png";
+
+
     public static String drawableToFile(Context context, Drawable drawable, String packageName) {
         Bitmap bitmap = drawableToBitmap(drawable);
         if (bitmap == null) {
@@ -50,12 +54,10 @@ public class ImageUtil {
 
 
     public static String saveBitmap(Context context, Bitmap mBitmap, String packageName) {
-        String savePath = FileUtil.getAppFileDir(context, "app_icon");
         File filePic;
 
         try {
-            String fileName = FileUtil.generateFileName(packageName, "jpg");
-            filePic = new File(savePath, fileName);
+            filePic = getAppIconFile(context, packageName);
             if (!filePic.exists()) {
                 filePic.getParentFile().mkdirs();
                 filePic.createNewFile();
@@ -63,7 +65,7 @@ public class ImageUtil {
                 return filePic.getAbsolutePath();
             }
             FileOutputStream fos = new FileOutputStream(filePic);
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
         } catch (IOException e) {
@@ -71,6 +73,17 @@ public class ImageUtil {
         }
 
         return filePic.getAbsolutePath();
+    }
+
+
+    public static File getAppIconFile(Context context, String packgename) {
+
+        String savePath = FileUtil.getAppFileDir(context, APP_ICON_CACHE_DIR);
+        File filePic;
+
+        String fileName = FileUtil.generateFileName(packgename, IMG_COMPRESS_FORMAT);
+        filePic = new File(savePath, fileName);
+        return filePic;
     }
 
 }

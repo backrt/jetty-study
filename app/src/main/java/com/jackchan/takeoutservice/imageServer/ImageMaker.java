@@ -7,12 +7,11 @@ import com.jackchan.takeoutservice.servlet2.proper.LocalAppProper;
 
 import java.util.List;
 
-import io.reactivex.Notification;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
@@ -39,92 +38,41 @@ public class ImageMaker {
                         return localAppPropers != null && !localAppPropers.isEmpty();
                     }
                 })
-                .map(new Function<List<LocalAppProper>, Observable<LocalAppProper>>() {
+                .flatMap(new Function<List<LocalAppProper>, ObservableSource<LocalAppProper>>() {
                     @Override
-                    public Observable<LocalAppProper> apply(@NonNull List<LocalAppProper> localAppPropers) throws Exception {
+                    public ObservableSource<LocalAppProper> apply(@NonNull List<LocalAppProper> localAppPropers) throws Exception {
                         return Observable.fromIterable(localAppPropers);
+                    }
+                })
+                .map(new Function<LocalAppProper, String>() {
+                    @Override
+                    public String apply(@NonNull LocalAppProper proper) throws Exception {
+                        return ImageUtil.drawableToFile(context, proper.getDrawable(), proper.getPackagename());
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(new Observer<Observable<LocalAppProper>>() {
+                .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull Observable<LocalAppProper> localAppProperObservable) {
-                        System.out.println("onNext -- ");
+                    public void onNext(@NonNull String s) {
+                        System.out.println("onNext = " + s);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        System.out.println("onError");
                     }
 
                     @Override
                     public void onComplete() {
-
+                        System.out.println("onComplete");
                     }
                 });
-
-//        Observable.just("app_icon")
-//                .map(new Function<String, List<LocalAppProper>>() {
-//                    @Override
-//                    public List<LocalAppProper> apply(@NonNull String s) throws Exception {
-//                        return LocalAppProvider.getLocalUninstalledApps(context);
-//                    }
-//                })
-//                .filter(new Predicate<List<LocalAppProper>>() {
-//                    @Override
-//                    public boolean test(@NonNull List<LocalAppProper> localAppPropers) throws Exception {
-//                        return localAppPropers != null && !localAppPropers.isEmpty();
-//                    }
-//                })
-//                .map(new Function<List<LocalAppProper>, Observable<LocalAppProper>>() {
-//                    @Override
-//                    public Observable<LocalAppProper> apply(@NonNull List<LocalAppProper> localAppPropers) throws Exception {
-//                        return Observable.fromIterable(localAppPropers);
-//                    }
-//                })
-//                .map(new Function<Observable<LocalAppProper>, String>() {
-//                    @Override
-//                    public String apply(@NonNull Observable<LocalAppProper> localAppProperObservable) throws Exception {
-//                        LocalAppProper localApp = localAppProperObservable.blockingLast();
-//                        return ImageUtil.drawableToFile(context, localApp.getDrawable(), localApp.getPackagename());
-//                    }
-//                })
-//                .filter(new Predicate<String>() {
-//                    @Override
-//                    public boolean test(@NonNull String s) throws Exception {
-//                        return !TextUtils.isEmpty(s);
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(Schedulers.io())
-//                .subscribe(new Observer<String>() {
-//                    @Override
-//                    public void onSubscribe(@NonNull Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(@NonNull String s) {
-//                        System.out.println("store app icon in file ==" + s);
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        System.out.println(e.toString());
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
-
 
     }
 

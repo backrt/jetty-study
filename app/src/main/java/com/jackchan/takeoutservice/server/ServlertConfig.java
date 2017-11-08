@@ -8,6 +8,7 @@ import com.jackchan.takeoutservice.servlet.OrderServlet;
 import com.jackchan.takeoutservice.servlet.PayServlet;
 import com.jackchan.takeoutservice.servlet.SellerListServlet;
 import com.jackchan.takeoutservice.servlet.UserLoginServlet;
+import com.jackchan.takeoutservice.servlet2.ImageFileServlet;
 import com.jackchan.takeoutservice.servlet2.LocalApkFileServlet;
 import com.jackchan.takeoutservice.servlet2.LocalAppServlet;
 import com.jackchan.takeoutservice.servlet2.LocalAppServlet2;
@@ -46,11 +47,12 @@ public class ServlertConfig {
         handler.addServlet(new ServletHolder(new PayServlet()), "/TakeoutService/pay");
         handler.addServlet(new ServletHolder(new SellerListServlet()), "/TakeoutService/sellerlist");
         handler.addServlet(new ServletHolder(new UserLoginServlet()), "/TakeoutService/login");
-        handler.addServlet(new ServletHolder(new ImageServlet()), "/TakeoutService/image");
+//        handler.addServlet(new ServletHolder(new ImageServlet()), "/TakeoutService/image");
 
         //test
         handler.addServlet(new ServletHolder(new LocalAppServlet()), "/TakeoutService/app");
         handler.addServlet(new ServletHolder(new LocalAppServlet2()), "/TakeoutService/applist");
         handler.addServlet(new ServletHolder(new LocalApkFileServlet()), "/TakeoutService/apk");
+        handler.addServlet(new ServletHolder(new ImageFileServlet()), "/TakeoutService/image");
     }
 }
