@@ -11,6 +11,11 @@ import com.jackchan.takeoutservice.servlet2.business.LocalAppProvider;
 import com.jackchan.takeoutservice.servlet2.proper.LocalAppProper;
 import com.jackchan.takeoutservice.utils.CommonUtil;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +70,9 @@ public class LocalAppServlet2 extends BaseServlet {
 
         // format response
 //        CommonUtil.renderJson(resp, bean);
+
+        //test
+        generateHtml_jsoup();
         CommonUtil.renderHtml(resp, generateHtml_applist());
     }
 
@@ -96,6 +104,35 @@ public class LocalAppServlet2 extends BaseServlet {
 
     private String generateHtml_applist() {
         return html;
+    }
+
+
+    private String generateHtml_jsoup() {
+        Document document = Jsoup.parse(html);
+
+//        for (Element element : document.child(0).children()) {
+//            System.out.println("nodeName= " + element.nodeName());
+//            System.out.println("tagName= " + element.tagName());
+//        }
+
+        Element headElement = document.head();
+        Element bodyElement = document.body();
+
+        System.out.println("parser #head# ");
+        for (Element element : headElement.children()) {
+            System.out.println("nodeName= " + element.nodeName());
+            for (Node node : element.childNodes()) {
+                System.out.println(node.nodeName() + ",");
+            }
+        }
+
+
+        System.out.println("parser #body# ");
+        for (Element element : bodyElement.children()) {
+            System.out.println("nodeName= " + element.nodeName());
+        }
+
+        return null;
     }
 
 
