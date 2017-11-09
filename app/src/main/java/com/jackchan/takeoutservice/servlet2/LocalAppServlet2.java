@@ -3,21 +3,15 @@ package com.jackchan.takeoutservice.servlet2;
 import android.util.Log;
 
 import com.jackchan.takeoutservice.App;
-import com.jackchan.takeoutservice.bean2.LocalAppBean;
-import com.jackchan.takeoutservice.bean2.LocalAppListDataBean;
-import com.jackchan.takeoutservice.bean2.ResponseBean;
 import com.jackchan.takeoutservice.servlet.BaseServlet;
 import com.jackchan.takeoutservice.servlet2.business.LocalAppProvider;
 import com.jackchan.takeoutservice.servlet2.proper.LocalAppProper;
 import com.jackchan.takeoutservice.utils.CommonUtil;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -34,105 +28,109 @@ public class LocalAppServlet2 extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        super.doGet(req, resp);
         Log.d(TAG, "doGet");
         Log.d(TAG, "method:" + req.getMethod() + "|" + "uri:" + req.getRequestURI() + "|" + "url:" + req.getRequestURL());
         Log.d(TAG, "remote addr:" + req.getRemoteAddr() + "|" + "remote host:" + req.getRemoteHost() + "|" + "remote port:" + req.getRemotePort());
 
-
-        ResponseBean bean = new ResponseBean();
-        bean.setMsg("服务器正常");
-        bean.setStatus_code(0);
-
-        // data bean
-        LocalAppListDataBean dataBean = new LocalAppListDataBean();
-        List<LocalAppBean> list = new ArrayList<>();
-
         //fetch local unstalled apps
         List<LocalAppProper> localAppPropers = LocalAppProvider.getLocalUninstalledApps(App.getContext());
-
-        for (LocalAppProper proper : localAppPropers) {
-            LocalAppBean appBean = new LocalAppBean();
-            appBean.setDescribe("测试应用");
-            appBean.setLabel(proper.getAppname());
-            appBean.setPackagename(proper.getPackagename());
-            appBean.setUrl(proper.getUrl());
-            appBean.setVername(proper.getVername());
-            appBean.setVercode(proper.getVercode());
-
-            //add
-            list.add(appBean);
-        }
-        dataBean.setApps(list);
-        dataBean.setItem_count(list.size());
-
-        bean.setData(dataBean);
-
-        // format response
-//        CommonUtil.renderJson(resp, bean);
-
-        //test
-        generateHtml_jsoup();
-        CommonUtil.renderHtml(resp, generateHtml_applist());
+        CommonUtil.renderHtml(resp, generateHtml(req.getRequestURL().toString(), localAppPropers));
     }
 
 
-    //public static String baseurl = "http://127.0.0.1:8090/TakeoutService/image?name=";
+    private String generateHtml(String url, List<LocalAppProper> list) {
+        Document document = new Document(url);
+        document.appendChild(generateElement_head());
+        document.appendChild(generateElement_body());
+        document.appendChild(generateElement_table(list));
 
-    String html = "<!DOCTYPE html>\n" +
-            "<html>\n" +
-            "\t<head>\n" +
-            "\t\t<meta charset=\"utf-8\" />\n" +
-            "\t\t<title>Jetty测试html</title>\n" +
-            "\t</head>\n" +
-            "\t<body>\n" +
-            "\t\t<h1>测试数据</h1>\n" +
-            "\t\t<table id=\"app_table\" border=\"3\" align=\"center\" cols=\"5\" bordercolor=\"#a32112\">\n" +
-            "\n" +
-            "\t\t\t<tr id=\"row1\">\n" +
-            "\t\t\t\t<td><img src=\"/TakeoutService/image?name=com.aishang.iptv.livecore\" height=\"100\" width=\"100\" />\n" +
-            "\t\t\t\t</td>\n" +
-            "\t\t\t\t<td><img src=\"/TakeoutService/image?name=com.aishang.iptv.livecore\" height=\"100\" width=\"100\" /></td>\n" +
-            "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +
-            "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +
-            "\t\t\t\t<td><img src=\"img/ic_launcher.png\" height=\"100\" width=\"100\" /></td>\n" +
-            "\t\t\t</tr>\n" +
-            "\t\t</table>\n" +
-            "\t</body>\n" +
-            "</html>";
+        return document.outerHtml();
+    }
 
+    private Element generateElement_head() {
 
-    private String generateHtml_applist() {
-        return html;
+        Element head = new Element("head");
+        //meta
+        Element meta = new Element("meta");
+        meta.attr("charset", "utf-8");
+        head.appendChild(meta);
+
+        //title
+        Element title = new Element("title");
+        title.text("测试HTML草泥马");
+        head.appendChild(title);
+
+        return head;
+    }
+
+    public Element generateElement_body() {
+
+        Element body = new Element("body");
+        //h1
+        Element h1 = new Element("h1");
+        h1.text("代码生成html");
+        body.appendChild(h1);
+
+        return body;
     }
 
 
-    private String generateHtml_jsoup() {
-        Document document = Jsoup.parse(html);
+    public Element generateElement_table(List<LocalAppProper> localAppPropers) {
 
-//        for (Element element : document.child(0).children()) {
-//            System.out.println("nodeName= " + element.nodeName());
-//            System.out.println("tagName= " + element.tagName());
-//        }
+        int count = localAppPropers.size();
+        final int COLUMN_SIZE = 6;
+        int columns = count / 6 + (count % 6 == 0 ? 0 : 1);
 
-        Element headElement = document.head();
-        Element bodyElement = document.body();
 
-        System.out.println("parser #head# ");
-        for (Element element : headElement.children()) {
-            System.out.println("nodeName= " + element.nodeName());
-            for (Node node : element.childNodes()) {
-                System.out.println(node.nodeName() + ",");
+        Element table = new Element("table");
+        table.attr("id", "app_table");
+        table.attr("border", "3");
+        table.attr("align", "center");
+        table.attr("cols", COLUMN_SIZE + "");
+        table.attr("bordercolor", "#a32112");
+
+
+        //trs
+        for (int i = 0; i < columns; i++) {
+            //tr
+            Element tr = new Element("tr");
+            tr.attr("id", "app_table_row_" + i);
+
+            for (int j = 0; j < COLUMN_SIZE; j++) {
+
+                int index = i * COLUMN_SIZE + j;
+                LocalAppProper localAppProper;
+                if (index < count) {
+                    localAppProper = localAppPropers.get(index);
+                    if (localAppProper == null) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+
+                Element td = new Element("td");
+                //a
+                Element a = new Element("a");
+                a.attr("align", "center");
+
+                // img
+                Element img = new Element("img");
+                img.attr("src", "/TakeoutService/image?name=" + localAppProper.getPackagename());
+                img.attr("height", "100");
+                img.attr("width", "100");
+                //p
+                Element p = new Element("p");
+                p.text(localAppProper.getAppname());
+
+                a.appendChild(img);
+                a.appendChild(p);
+                td.appendChild(a);
+                tr.appendChild(td);
             }
+            table.appendChild(tr);
         }
-
-
-        System.out.println("parser #body# ");
-        for (Element element : bodyElement.children()) {
-            System.out.println("nodeName= " + element.nodeName());
-        }
-
-        return null;
+        return table;
     }
 
 
