@@ -82,12 +82,14 @@ public class LocalAppServlet2 extends BaseServlet {
         int columns = count / 6 + (count % 6 == 0 ? 0 : 1);
 
 
+        //table
         Element table = new Element("table");
         table.attr("id", "app_table");
         table.attr("border", "3");
         table.attr("align", "center");
         table.attr("cols", COLUMN_SIZE + "");
         table.attr("bordercolor", "#a32112");
+        table.addClass("app_table");
 
 
         //trs
@@ -113,6 +115,7 @@ public class LocalAppServlet2 extends BaseServlet {
                 //a
                 Element a = new Element("a");
                 a.attr("align", "center");
+                a.attr("href", "/TakeoutService/apk?packagename=" + localAppProper.getPackagename());
 
                 // img
                 Element img = new Element("img");
@@ -132,6 +135,5 @@ public class LocalAppServlet2 extends BaseServlet {
         }
         return table;
     }
-
 
 }
